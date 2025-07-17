@@ -1,0 +1,11 @@
+{
+  "name": "2.-node-module-system",
+  "version": "1.0.0",
+  "description": "node package manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gaurav Jangir",
+  "license": "ISC"
+}
