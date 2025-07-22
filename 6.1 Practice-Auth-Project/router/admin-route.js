@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/welcome", authMiddleware, adminMiddleware, (req, res) => {
   res.json({
-    message: "Welcome to the Admin Page",
+    message: "Welcome to Admin Page!",
   });
 });
 
