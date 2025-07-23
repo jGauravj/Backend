@@ -95,7 +95,7 @@ const loginUser = async (req, res) => {
       accessToken,
     });
   } catch (e) {
-    conosole.log("Error->", e);
+    console.log("Error->", e);
     res.status(500).json({
       success: false,
       message: "Some error occured! Please try again",
@@ -103,4 +103,52 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.userInfo.userId;
+
+    // extraxt old and new password -->
+    const { oldPassword, newPassword } = req.body;
+
+    //Find current logged in user-->
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found!!",
+      });
+    }
+
+    // check if the oldPassword is correct -->
+    const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isPasswordMatch) {
+      return res.status(400).json({
+        success: "false",
+        message: "Old password is not correct! Plaese try again.",
+      });
+    }
+
+    // Hash new password -->
+    const salt = await bcrypt.genSalt(10);
+    const newHashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // update user password ->
+    user.password = newHashedPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed Successfully!!",
+    });
+  } catch (e) {
+    console.log("Error->", e);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured! Please try again",
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, changePassword };
